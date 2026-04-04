@@ -1,60 +1,65 @@
-arabe = {'ا': ('/aː/', '/aː/'),    # alif — voyelle longue
-    'ب': ('/b/', '/b/'),
-    'ت': ('/t/', '/t/'),
-    'ث': ('/θ/', '/ʃ/'),      # arabe : th, hébreu : sh
-    'ج': ('/dʒ/', '/g/'),     # arabe : dj, hébreu : g
-    'ح': ('/ħ/', '/ħ/'),
-    'خ': ('/x/', '/x/'),
-    'د': ('/d/', '/d/'),
-    'ذ': ('/ð/', '/z/'),      # arabe : dh, hébreu : z
-    'ر': ('/r/', '/r/'),
-    'ز': ('/z/', '/z/'),
-    'س': ('/s/', '/s/'),      # attention : pas /ʃ/ en hébreu moderne
-    'ش': ('/ʃ/', '/ʃ/'),
-    'ص': ('/sˤ/', '/ts/'),    # emphatique arabe --> tsadé hébreu
-    'ض': ('/dˤ/', '/ts/'),
-    'ط': ('/tˤ/', '/t/'),     # emphatique arabe --> t hébreu
-    'ظ': ('/ðˤ/', '/ts/'),
-    'ع': ('/ʕ/', '/ʕ/'),
-    'غ': ('/ɣ/', '/ʕ/'),      # arabe : gh, hébreu : ayin
-    'ف': ('/f/', '/f/'),
-    'ق': ('/q/', '/k/'),      # arabe : qaf, hébreu : kaf
-    'ك': ('/k/', '/k/'),
-    'ل': ('/l/', '/l/'),
-    'م': ('/m/', '/m/'),
-    'ن': ('/n/', '/n/'),
-    'ه': ('/h/', '/h/'),
-    'و': ('/w/', '/v/'),      # arabe : w, hébreu : v (hébreu moderne)
-    'ي': ('/j/', '/j/'),
-    'ء': ('/ʔ/', '/ʔ/'),      # hamza / alef
-    'ة': ('/a/', '/—/'),      # tāʾ marbūṭa
-}
+from phonemes import arabe, hebreu_biblique, hebreu_moderne, traits_phonemes
 
-hébreu = {'א': '/ʔ/',      # alef — occlusive glottale
-    'ב': '/b/',      # bet (avec dagesh) / '/v/' (sans dagesh)
-    'ג': '/g/',      # gimel
-    'ד': '/d/',      # dalet
-    'ה': '/h/',      # he
-    'ו': '/v/',      # vav (hébreu moderne)
-    'ז': '/z/',      # zayin
-    'ח': '/χ/',      # het — fricative vélaire (≈ /ħ/ en hébreu biblique)
-    'ט': '/t/',      # tet
-    'י': '/j/',      # yod
-    'כ': '/k/',      # kaf (avec dagesh) / '/x/' (sans dagesh)
-    'ך': '/x/',      # kaf final
-    'ל': '/l/',      # lamed
-    'מ': '/m/',      # mem
-    'ם': '/m/',      # mem final
-    'נ': '/n/',      # nun
-    'ן': '/n/',      # nun final
-    'ס': '/s/',      # samekh
-    'ע': '/ʕ/',      # ayin (hébreu biblique) / '/∅/' (hébreu moderne)
-    'פ': '/p/',      # pe (avec dagesh) / '/f/' (sans dagesh)
-    'ף': '/f/',      # pe final
-    'צ': '/ts/',     # tsadi
-    'ץ': '/ts/',     # tsadi final
-    'ק': '/k/',      # qof
-    'ר': '/r/',      # resh
-    'ש': '/ʃ/',      # shin / '/s/' (sin)
-    'ת': '/t/',      # tav (hébreu moderne) / '/θ/' (hébreu biblique)
-}
+def distance_phonemes(p1, p2):
+    """
+    Calcule la distance phonologique entre deux phonèmes.
+    p1, p2 : chaînes IPA ex: '/b/', '/p/'
+    Retourne : nombre de traits différents (entre 0 et 7)
+    """
+
+    vecteur1 = traits_phonemes[p1]
+    vecteur2 = traits_phonemes[p2]
+    compteur = 0
+    for t1, t2 in zip(vecteur1, vecteur2):
+        if t1 != t2:
+            compteur += 1
+    return compteur 
+    
+def dst_racines_hst(r_arabe, r_hebreu): # calcule la distance historique entre deux racines 
+    """
+    Distance historique entre deux racines.
+    Pour chaque paire de lettres alignées :
+    - côté arabe : arabe[lettre][1] → correspondant historique hébreu
+    - côté hébreu : hébreu[lettre] → phonème hébreu actuel
+    """
+
+    distance_historique = 0
+    phonemes_ar = []
+    phonemes_hbw = []
+    for lettre_ar, lettre_hbw in zip(r_arabe, r_hebreu):
+            # <---- on récupère les phonèmes ---->
+            phonemes_ar.append(arabe[lettre_ar][1]) # index à 1 car dans le dico arabe chaque valeur 
+                                                    # = un tuple de deux phonèmes // Ici on récupère le correspondant hébreu historique
+            phonemes_hbw.append(hebreu_biblique[lettre_hbw]) 
+
+    for p_ar, p_hbw in zip(phonemes_ar, phonemes_hbw): # on boucle sur les phonèmes récupérés
+        distance_historique += distance_phonemes(p_ar, p_hbw) # on incrémente en appelant la fonction 
+                                                        #précédente sur nos deux phonèmes
+    return distance_historique
+
+def dst_racines_sync(r_arabe, r_hebreu): # calcule la distance synchronique entre racines
+    """
+    Distance synchronique entre deux racines.
+    Compare les phonèmes actuels des deux langues.
+    """
+    phonemes_ar = []
+    phonemes_hbw = []
+    distance_synchronique = 0
+    for lettre_ar, lettre_hbw in zip(r_arabe, r_hebreu):
+        phonemes_ar.append(arabe[lettre_ar][0])
+        phonemes_hbw.append(hebreu_moderne[lettre_hbw])
+    for p_ar, p_hbw in zip(phonemes_ar, phonemes_hbw):
+        distance_synchronique += distance_phonemes(p_ar, p_hbw)
+    return distance_synchronique
+
+print(dst_racines_sync('قلب', 'קלב'))   # /q/ vs /k/
+print(dst_racines_hst('قلب', 'קלב'))   # /q/ vs /k/
+
+print(dst_racines_sync('حكم', 'חכם'))   # /ħ/ vs /χ/
+print(dst_racines_hst('حكم', 'חכם'))   # /ħ/ vs /χ/
+
+print(dst_racines_sync('غرب', 'ערב'))   # /ɣ/ vs /ʕ/
+print(dst_racines_hst('غرب', 'ערב'))   # /ɣ/ vs /ʕ/
+
+print(arabe['ق'])           # tuple arabe
+print(hebreu_biblique['ק']) # phonème biblique
