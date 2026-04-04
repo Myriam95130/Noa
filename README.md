@@ -4,7 +4,7 @@
 
 L'outil Noah est nommé en référence au personnage biblique Noé, dont le fils Sem est considéré comme l'ancêtre éponyme des peuples sémitiques, parmi lesquels les Arabes et les Hébreux, dont les langues sont au cœur de cet outil.
 
-Outil de linguistique computationnelle comparée pour l'analyse des distances
+Noah est un outil de linguistique computationnelle comparée pour l'analyse des distances
 phonologiques entre l'arabe et l'hébreu, deux langues sémitiques partageant
 un système de racines trilitères commun.
 
