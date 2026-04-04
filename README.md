@@ -28,7 +28,7 @@ divergences de façon computationnelle.
 - **Lexique comparatif** --> base de données de paires arabe/hébreu annotées
   avec racine, schème, catégorie, traductions
 
-## Correspondances phonétiques régulières
+## Correspondances phonétiques régulières arabe vs hébreu moderne
 
 | Arabe | Hébreu | IPA arabe | IPA hébreu | Exemple |
 |-------|--------|-----------|------------|---------|
