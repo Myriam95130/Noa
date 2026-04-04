@@ -164,7 +164,7 @@ from phonemes import arabe, hébreu_biblique, hébreu_moderne, traits_phonemes
 
 ### Avantage
 
-Plus lisible et facilite l'extension future : ajouter l'araméen, l'assyrien, l'amharique ne touche que `phonemes.py`.
+Plus lisible et facilite l'extension future : ajouter l'araméen, l'assyrien, l'amharique, le maltais, l'arabe chypriote, ne touche que `phonemes.py`.
 
 ## Feuille de route
 
@@ -179,7 +179,7 @@ Plus lisible et facilite l'extension future : ajouter l'araméen, l'assyrien, l'
 - [ ] Export des résultats en TSV
 
 ### Long terme
-- [ ] Extension à l'araméen, l'assyrien, l'amharique
+- [ ] Extension à l'araméen, l'assyrien, l'amharique, le maltais, l'arabe chypriote
 - [ ] Comparaison automatique avec un lexique proto-sémitique reconstruit
 - [ ] Interface web interactive
 
